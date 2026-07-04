@@ -1,39 +1,34 @@
 # SysWatch
 
-A simple cross-platform system monitor written in Python using `psutil`.
+A lightweight system monitoring application built with Python that displays real-time system information and logs performance metrics to a MySQL database for historical analysis.
 
-## Getting Started
+## Features
 
-### 1) Create a virtual environment
+* Real-time CPU usage monitoring
+* Memory (RAM) utilization tracking
+* Disk usage monitoring
+* Network I/O statistics
+* Automatic logging of system metrics to a MySQL database
+* Simple, modular codebase designed for learning and future expansion
 
-```bash
-python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# macOS / Linux
-source .venv/bin/activate
-```
+## Technologies
 
-### 2) Install requirements
+* Python 3
+* psutil
+* MySQL
+* mysql-connector-python
+* python-dotenv
 
-```bash
-pip install -r requirements.txt
-```
+## Future Improvements
 
-### 3) Run the monitor
+* Web dashboard using Flask
+* Historical performance charts
+* Monitor multiple computers from a single dashboard
+* System uptime and boot time tracking
+* Process monitoring
+* Email or Discord alerts for high CPU or memory usage
+* Docker deployment
+* REST API for remote monitoring
 
-```bash
-python monitor.py
-```
 
-### 4) Optional flags
 
-- `--interval <seconds>` / `-i`: refresh interval (default `1.0`)
-- `--once`: print one snapshot and exit
-
----
-
-## Notes
-
-- Works on Windows/macOS/Linux.
-- Uses `psutil` for CPU, memory, disk, and network stats.
