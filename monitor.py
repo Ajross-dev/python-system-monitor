@@ -1,16 +1,15 @@
-# Simple System Monitor using psutil
-# Run: python monitor.py
+# collects and saves system metrics
 
 import os
 import time
 import psutil
 
+from logger import save_metrics
 
-REFRESH_SECONDS = 2
+REFRESH_SECONDS = 25
 
 
 def clear_screen():
-    """Clears the terminal screen."""
     if os.name == "nt":
         os.system("cls")
     else:
@@ -18,13 +17,27 @@ def clear_screen():
 
 
 def bytes_to_gb(bytes_value):
-    """Converts bytes into gigabytes."""
     return round(bytes_value / (1024 ** 3), 2)
 
 
-def show_cpu():
-    """Displays CPU usage."""
+def get_metrics():
+    """Collects CPU, memory, disk, and network data"""
     cpu_usage = psutil.cpu_percent(interval=1)
+
+    memory = psutil.virtual_memory()
+    memory_percent = memory.percent
+
+    disk = psutil.disk_usage("/")
+    disk_percent = disk.percent
+
+    network = psutil.net_io_counters()
+    bytes_sent = network.bytes_sent
+    bytes_received = network.bytes_recv
+
+    return cpu_usage, memory_percent, disk_percent, bytes_sent, bytes_received
+
+
+def show_cpu(cpu_usage):
     cpu_count = psutil.cpu_count()
 
     print("CPU")
@@ -33,8 +46,7 @@ def show_cpu():
     print()
 
 
-def show_memory():
-    """Displays RAM usage."""
+def show_memory(memory_percent):
     memory = psutil.virtual_memory()
 
     used_gb = bytes_to_gb(memory.used)
@@ -42,12 +54,11 @@ def show_memory():
 
     print("Memory")
     print(f"Used: {used_gb} GB / {total_gb} GB")
-    print(f"Percent Used: {memory.percent}%")
+    print(f"Percent Used: {memory_percent}%")
     print()
 
 
-def show_disk():
-    """Displays disk usage."""
+def show_disk(disk_percent):
     disk = psutil.disk_usage("/")
 
     used_gb = bytes_to_gb(disk.used)
@@ -55,16 +66,14 @@ def show_disk():
 
     print("Disk")
     print(f"Used: {used_gb} GB / {total_gb} GB")
-    print(f"Percent Used: {disk.percent}%")
+    print(f"Percent Used: {disk_percent}%")
     print()
 
 
-def show_network():
-    """Displays total network data sent and received."""
-    network = psutil.net_io_counters()
-
-    sent_mb = round(network.bytes_sent / (1024 ** 2), 2)
-    received_mb = round(network.bytes_recv / (1024 ** 2), 2)
+def show_network(bytes_sent, bytes_received):
+    """Displays total network data sent and received"""
+    sent_mb = round(bytes_sent / (1024 ** 2), 2)
+    received_mb = round(bytes_received / (1024 ** 2), 2)
 
     print("Network")
     print(f"Data Sent: {sent_mb} MB")
@@ -73,18 +82,23 @@ def show_network():
 
 
 def main():
-    """Main program loop."""
     while True:
         clear_screen()
 
-        print("=== Simple System Monitor ===")
+        cpu, memory, disk, sent, received = get_metrics()
+
+        save_metrics(cpu, memory, disk, sent, received)
+
+        print("System Monitor Running...")
         print("Press Ctrl+C to stop")
         print()
 
-        show_cpu()
-        show_memory()
-        show_disk()
-        show_network()
+        show_cpu(cpu)
+        show_memory(memory)
+        show_disk(disk)
+        show_network(sent, received)
+
+        print("Metrics saved.")
 
         time.sleep(REFRESH_SECONDS)
 
