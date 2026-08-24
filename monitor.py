@@ -11,9 +11,9 @@ REFRESH_SECONDS = 25
 
 def clear_screen():
     if os.name == "nt":
-        os.system("cls")
+        os.system("cls") #Windows
     else:
-        os.system("clear")
+        os.system("clear") #Anything other os
 
 
 def bytes_to_gb(bytes_value):
