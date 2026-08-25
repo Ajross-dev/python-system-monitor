@@ -29,5 +29,7 @@ def save_metrics(cpu_percent, memory_percent, disk_percent, bytes_sent, bytes_re
         conn.commit()
 
     finally:
-        cursor.close()
+        if cursor:
+            cursor.close()
+
         conn.close()
