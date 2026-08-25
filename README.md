@@ -18,17 +18,16 @@ A lightweight system monitoring application built with Python that displays real
 * MySQL
 * mysql-connector-python
 * python-dotenv
+* Flask
 
 ## Future Improvements
 
-* Web dashboard using Flask
 * Historical performance charts
 * Monitor multiple computers from a single dashboard
 * System uptime and boot time tracking
 * Process monitoring
 * Email or Discord alerts for high CPU or memory usage
 * Docker deployment
-* REST API for remote monitoring
 
 
 
